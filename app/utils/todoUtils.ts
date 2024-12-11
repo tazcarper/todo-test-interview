@@ -72,7 +72,8 @@ export const calculateDepth = (todo: Todo): number => {
 };
 
 export const fetchRandomTodo = async (
-  existingSuggestion: SampleTodo | null
+  existingSuggestion: SampleTodo | null,
+  currentTodos: Todo[]
 ): Promise<SampleTodo> => {
   try {
     const response = await fetch("/sample-todos.json");
@@ -83,12 +84,19 @@ export const fetchRandomTodo = async (
     if (!data.todos || !Array.isArray(data.todos) || data.todos.length === 0) {
       throw new Error("Invalid or empty todos data");
     }
-    let randomTodo: SampleTodo;
-    do {
-      const randomIndex = Math.floor(Math.random() * data.todos.length);
-      randomTodo = data.todos[randomIndex];
-    } while (existingSuggestion && randomTodo.id === existingSuggestion.id);
-    return randomTodo;
+    
+    const availableTodos = data.todos.filter((todo: SampleTodo) => 
+      todo.text !== existingSuggestion?.text && 
+      !currentTodos?.some(currentTodo => currentTodo.text === todo.text)
+    );
+
+    if (availableTodos.length === 0) {
+      throw new Error("No new todos available");
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableTodos.length);
+    console.log(availableTodos[randomIndex])
+    return availableTodos[randomIndex];
   } catch (error) {
     console.error("Error fetching random todo:", error);
     throw error;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Trash2,
   Plus,
@@ -31,26 +31,29 @@ export default function TodoList() {
   const [showCompleted, setShowCompleted] = useState(true);
   const [showUncompleted, setShowUncompleted] = useState(true);
 
-  useEffect(() => {
-    const storedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
-    handleFetchRandomTodo();
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
-
-  const handleFetchRandomTodo = async () => {
+  const handleFetchRandomTodo = useCallback(async () => {
     try {
-      const newSuggestedTodo = await fetchRandomTodo(suggestedTodo);
+      const newSuggestedTodo = await fetchRandomTodo(suggestedTodo, todos);
       setSuggestedTodo(newSuggestedTodo);
     } catch (error) {
       console.error("Error fetching random todo:", error);
     }
-  };
+  }, [suggestedTodo, todos]);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (typeof window !== "undefined") {
+      if (storedTodos) {
+        setTodos(JSON.parse(storedTodos));
+      }
+
+      handleFetchRandomTodo();
+    }
+  }, [handleFetchRandomTodo]);
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   const handleAddTodo = (
     e: React.FormEvent,
@@ -187,14 +190,20 @@ export default function TodoList() {
               <button
                 onClick={(e) => {
                   handleAddTodo(e, suggestedTodo.text);
-                  handleFetchRandomTodo();
+                  if (typeof window !== "undefined") {
+                    handleFetchRandomTodo();
+                  }
                 }}
                 className="btn btn-sm btn-ghost"
               >
                 Add
               </button>
               <button
-                onClick={handleFetchRandomTodo}
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    handleFetchRandomTodo();
+                  }
+                }}
                 className="btn btn-sm btn-ghost"
                 aria-label="Suggest another todo"
               >

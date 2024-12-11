@@ -18,13 +18,11 @@
     "lucide-react": "^0.468.0",
     "next": "15.0.4",
     "react": "^19.0.0",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "^19",
     "eslint": "^8",
     "eslint-config-next": "15.0.4",
