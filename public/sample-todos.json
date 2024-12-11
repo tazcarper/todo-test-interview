@@ -1,0 +1,129 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "Learn a new programming language",
+      "category": "Personal Development"
+    },
+    {
+      "id": 2,
+      "text": "Write a blog post about React hooks",
+      "category": "Work"
+    },
+    {
+      "id": 3,
+      "text": "Go for a 30-minute walk",
+      "category": "Health"
+    },
+    {
+      "id": 4,
+      "text": "Read a chapter of a book",
+      "category": "Personal Development"
+    },
+    {
+      "id": 5,
+      "text": "Clean the kitchen",
+      "category": "Home"
+    },
+    {
+      "id": 6,
+      "text": "Practice meditation for 15 minutes",
+      "category": "Health"
+    },
+    {
+      "id": 7,
+      "text": "Call a friend or family member",
+      "category": "Personal"
+    },
+    {
+      "id": 8,
+      "text": "Update resume",
+      "category": "Career"
+    },
+    {
+      "id": 9,
+      "text": "Water the plants",
+      "category": "Home"
+    },
+    {
+      "id": 10,
+      "text": "Plan meals for the week",
+      "category": "Health"
+    },
+    {
+      "id": 11,
+      "text": "Learn a new recipe",
+      "category": "Personal Development"
+    },
+    {
+      "id": 12,
+      "text": "Organize digital files",
+      "category": "Work"
+    },
+    {
+      "id": 13,
+      "text": "Do a 7-minute workout",
+      "category": "Health"
+    },
+    {
+      "id": 14,
+      "text": "Write in a journal",
+      "category": "Personal Development"
+    },
+    {
+      "id": 15,
+      "text": "Declutter a room",
+      "category": "Home"
+    },
+    {
+      "id": 16,
+      "text": "Practice a musical instrument",
+      "category": "Hobby"
+    },
+    {
+      "id": 17,
+      "text": "Review monthly budget",
+      "category": "Finance"
+    },
+    {
+      "id": 18,
+      "text": "Take online course lesson",
+      "category": "Education"
+    },
+    {
+      "id": 19,
+      "text": "Backup important files",
+      "category": "Technology"
+    },
+    {
+      "id": 20,
+      "text": "Plan weekend activities",
+      "category": "Personal"
+    },
+    {
+      "id": 21,
+      "text": "Research a new topic of interest",
+      "category": "Personal Development"
+    },
+    {
+      "id": 22,
+      "text": "Practice public speaking",
+      "category": "Career"
+    },
+    {
+      "id": 23,
+      "text": "Try a new healthy recipe",
+      "category": "Health"
+    },
+    {
+      "id": 24,
+      "text": "Start a side project",
+      "category": "Personal Development"
+    },
+    {
+      "id": 25,
+      "text": "Volunteer for a local charity",
+      "category": "Community"
+    }
+  ]
+}

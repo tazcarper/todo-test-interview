@@ -9,7 +9,7 @@ import {
   ArrowUpDown,
   Filter,
 } from "lucide-react";
-import { Todo, SampleTodo } from "./types/todo";
+import { Todo, SampleTodo } from "../types/todo";
 import {
   addTodo,
   toggleTodoCompletion,
@@ -17,7 +17,7 @@ import {
   calculateDepth,
   fetchRandomTodo,
   sortTodos,
-} from "./utils/todoUtils";
+} from "../utils/todoUtils";
 
 const LOCAL_STORAGE_KEY = "todos";
 
