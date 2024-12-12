@@ -140,7 +140,11 @@ export default function TodoList() {
             value={newSubtask}
             onChange={(e) => setNewSubtask(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary btn-sm">
+          <button
+            type="submit"
+            className="btn btn-primary btn-sm"
+            data-testid="subtaskButton"
+          >
             Add
           </button>
         </form>
@@ -173,7 +177,11 @@ export default function TodoList() {
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            data-testid="addTodo"
+          >
             <Plus className="w-5 h-5" />
             Add
           </button>
@@ -190,6 +198,7 @@ export default function TodoList() {
                   handleFetchRandomTodo();
                 }}
                 className="btn btn-sm btn-ghost"
+                data-testid="addSuggested"
               >
                 Add
               </button>

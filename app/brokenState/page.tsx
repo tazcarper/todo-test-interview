@@ -144,7 +144,7 @@ export default function TodoList() {
             onChange={(e) => setNewSubtask(e.target.value)}
           />
           <button type="submit" className="btn btn-primary btn-sm">
-            Add
+            Add Subtask
           </button>
         </form>
       )}
@@ -178,7 +178,7 @@ export default function TodoList() {
           />
           <button type="submit" className="btn btn-primary">
             <Plus className="w-5 h-5" />
-            Add
+            Add Todo
           </button>
         </form>
 
@@ -196,7 +196,7 @@ export default function TodoList() {
                 }}
                 className="btn btn-sm btn-ghost"
               >
-                Add
+                Add Subtask
               </button>
               <button
                 onClick={() => {

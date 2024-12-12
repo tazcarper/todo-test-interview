@@ -1,17 +1,17 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import TodoList from "./page";
+import TodoList from "../page";
 import * as todoUtils from "../utils/todoUtils";
 
 // Mock the localStorage
 const localStorageMock = (function () {
-  let store: Record<string, string> = {};
+  let store = {};
   return {
-    getItem: function (key: string) {
+    getItem: function (key) {
       return store[key] || null;
     },
-    setItem: function (key: string, value: string) {
+    setItem: function (key, value) {
       store[key] = value.toString();
     },
     clear: function () {
@@ -33,10 +33,17 @@ jest.mock("../utils/todoUtils", () => ({
 describe("TodoList Component", () => {
   beforeEach(() => {
     localStorageMock.clear();
+   
   });
 
-  test("renders TodoList component", () => {
-    render(<TodoList />);
+  afterEach(() => {
+    cleanup();
+  })
+
+  test("renders TodoList component", async () => {
+    await act(async () => {
+      render(<TodoList />);
+    });
     expect(screen.getByText("Advanced Todo List")).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("Add a new todo...")
@@ -44,92 +51,119 @@ describe("TodoList Component", () => {
   });
 
   test("adds a new todo", async () => {
-    render(<TodoList />);
-    const input = screen.getByPlaceholderText("Add a new todo...");
-    const addButton = screen.getByRole("button", { name: "Add" });
-
-    fireEvent.change(input, { target: { value: "New test todo" } });
-    fireEvent.click(addButton);
-
-    await waitFor(() => {
-      expect(screen.getByText("New test todo")).toBeInTheDocument();
+    await act(async () => {
+      render(<TodoList />);
     });
+    const input = screen.getByPlaceholderText("Add a new todo...");
+    const addButton = screen.getByTestId("addTodo");
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "New test todo" } });
+      fireEvent.click(addButton);
+    });
+
+    expect(screen.getByText("New test todo")).toBeInTheDocument();
   });
 
   test("toggles a todo", async () => {
-    render(<TodoList />);
+    await act(async () => {
+      render(<TodoList />);
+    });
     const input = screen.getByPlaceholderText("Add a new todo...");
-    const addButton = screen.getByRole("button", { name: "Add" });
+    const addButton = screen.getByTestId("addTodo");
 
-    fireEvent.change(input, { target: { value: "Toggle test todo" } });
-    fireEvent.click(addButton);
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "Toggle test todo" } });
+      fireEvent.click(addButton);
+    });
 
     const todoCheckbox = screen.getByRole("checkbox");
-    fireEvent.click(todoCheckbox);
-
-    await waitFor(() => {
-      expect(todoCheckbox).toBeChecked();
+    
+    await act(async () => {
+      fireEvent.click(todoCheckbox);
     });
+
+    expect(todoCheckbox).toBeChecked();
   });
 
   test("deletes a todo", async () => {
-    render(<TodoList />);
+    await act(async () => {
+      render(<TodoList />);
+    });
     const input = screen.getByPlaceholderText("Add a new todo...");
-    const addButton = screen.getByRole("button", { name: "Add" });
+    const addButton = screen.getByTestId("addTodo");
 
-    fireEvent.change(input, { target: { value: "Delete test todo" } });
-    fireEvent.click(addButton);
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "Delete test todo" } });
+      fireEvent.click(addButton);
+    });
 
     const deleteButton = screen.getByLabelText("Delete todo");
-    fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      expect(screen.queryByText("Delete test todo")).not.toBeInTheDocument();
+    
+    await act(async () => {
+      fireEvent.click(deleteButton);
     });
+
+    expect(screen.queryByText("Delete test todo")).not.toBeInTheDocument();
   });
 
   test("filters todos", async () => {
-    render(<TodoList />);
+    await act(async () => {
+      render(<TodoList />);
+    });
     const input = screen.getByPlaceholderText("Add a new todo...");
-    const addButton = screen.getByRole("button", { name: "Add" });
+    const addButton = screen.getByTestId("addTodo");
 
-    fireEvent.change(input, { target: { value: "Completed todo" } });
-    fireEvent.click(addButton);
-    fireEvent.change(input, { target: { value: "Uncompleted todo" } });
-    fireEvent.click(addButton);
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "Completed todo" } });
+      fireEvent.click(addButton);
+      fireEvent.change(input, { target: { value: "Uncompleted todo" } });
+      fireEvent.click(addButton);
+    });
 
     const todoCheckboxes = screen.getAllByRole("checkbox");
-    fireEvent.click(todoCheckboxes[0]);
+    
+    await act(async () => {
+      fireEvent.click(todoCheckboxes[0]);
+    });
 
     const hideCompletedButton = screen.getByRole("button", {
       name: "Hide Completed",
     });
-    fireEvent.click(hideCompletedButton);
-
-    await waitFor(() => {
-      expect(screen.queryByText("Completed todo")).not.toBeInTheDocument();
-      expect(screen.getByText("Uncompleted todo")).toBeInTheDocument();
+    
+    await act(async () => {
+      fireEvent.click(hideCompletedButton);
     });
+
+    expect(screen.queryByText("Completed todo")).not.toBeInTheDocument();
+    expect(screen.getByText("Uncompleted todo")).toBeInTheDocument();
   });
 
   test("sorts todos", async () => {
-    render(<TodoList />);
+    await act(async () => {
+      render(<TodoList />);
+    });
     const input = screen.getByPlaceholderText("Add a new todo...");
-    const addButton = screen.getByRole("button", { name: "Add" });
+    const addButton = screen.getByTestId("addTodo");
 
-    fireEvent.change(input, { target: { value: "First todo" } });
-    fireEvent.click(addButton);
-    fireEvent.change(input, { target: { value: "Second todo" } });
-    fireEvent.click(addButton);
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "First todo" } });
+      fireEvent.click(addButton);
+      fireEvent.change(input, { target: { value: "Second todo" } });
+      fireEvent.click(addButton);
+    });
 
     const sortButton = screen.getByRole("button", { name: /Sort by/i });
-    fireEvent.click(sortButton);
+    
+    await act(async () => {
+      fireEvent.click(sortButton);
+    });
 
     const todos = screen.getAllByRole("checkbox");
-    await waitFor(() => {
-      expect(todos[0].nextSibling).toHaveTextContent("Second todo");
-      expect(todos[1].nextSibling).toHaveTextContent("First todo");
-    });
+    expect(todos[0].nextSibling).toHaveTextContent("Second todo");
+    expect(todos[1].nextSibling).toHaveTextContent("First todo");
   });
 });
 
@@ -197,4 +231,27 @@ describe("TodoUtils", () => {
     const depth = todoUtils.calculateDepth(todo);
     expect(depth).toBe(3);
   });
+
+
+  test("adds a suggested todo", async () => {
+    await act(async () => {
+      render(<TodoList />);
+    });
+
+    // Wait for the suggested todo to appear
+    await screen.findByText("Suggested todo: Mocked todo");
+
+    const addSuggestedButton = screen.getByTestId("addSuggested");
+
+    await act(async () => {
+      fireEvent.click(addSuggestedButton);
+    });
+
+    // Check if the suggested todo has been added to the list
+    expect(screen.getByText("Mocked todo")).toBeInTheDocument();
+
+    // Check if a new suggestion is fetched after adding the previous one
+    await screen.findByText("Suggested todo: Mocked todo");
+  });
 });
+
