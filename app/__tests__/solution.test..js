@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import TodoList from "../page";
-import * as todoUtils from "../utils/todoUtils";
+import TodoList from "../solution/page";
+import * as todoUtils from "../solution/todoUtils";
 
 // Mock the localStorage
 const localStorageMock = (function () {
@@ -23,8 +23,8 @@ const localStorageMock = (function () {
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 // Mock the fetchRandomTodo function
-jest.mock("../utils/todoUtils", () => ({
-  ...jest.requireActual("../utils/todoUtils"),
+jest.mock("../solution/todoUtils", () => ({
+  ...jest.requireActual("../solution/todoUtils"),
   fetchRandomTodo: jest
     .fn()
     .mockResolvedValue({ id: 1, text: "Mocked todo", category: "Test" }),
@@ -40,13 +40,10 @@ describe("TodoList Component", () => {
     cleanup();
   })
 
-
-  
-  test("renders the correct title for Todo Application", async () => {
+  test("renders TodoList component", async () => {
     await act(async () => {
       render(<TodoList />);
     });
-
     expect(screen.getByText("Todo List")).toBeInTheDocument();
 
   });
@@ -68,7 +65,7 @@ describe("TodoList Component", () => {
     expect(screen.getByText("New test todo")).toBeInTheDocument();
   });
 
-  test("toggles a todo complete or incompleted", async () => {
+  test("toggles a todo", async () => {
     await act(async () => {
       render(<TodoList />);
     });
@@ -170,9 +167,6 @@ describe("TodoList Component", () => {
   });
 });
 
-
-// Utility Function Tests
-
 describe("TodoUtils", () => {
   test("addTodo adds a new todo", () => {
     const initialTodos = [];
@@ -210,6 +204,33 @@ describe("TodoUtils", () => {
     expect(updatedTodos).toHaveLength(0);
   });
 
+  test("calculateDepth returns correct depth", () => {
+    const todo = {
+      id: "1",
+      text: "Parent",
+      completed: false,
+      subtodos: [
+        {
+          id: "2",
+          text: "Child",
+          completed: false,
+          subtodos: [
+            {
+              id: "3",
+              text: "Grandchild",
+              completed: false,
+              subtodos: [],
+              timestamp: Date.now(),
+            },
+          ],
+          timestamp: Date.now(),
+        },
+      ],
+      timestamp: Date.now(),
+    };
+    const depth = todoUtils.calculateDepth(todo);
+    expect(depth).toBe(3);
+  });
 
 
   test("adds a suggested todo", async () => {

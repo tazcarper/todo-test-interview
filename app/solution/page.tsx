@@ -9,24 +9,39 @@ import {
   ArrowUpDown,
   Filter,
 } from "lucide-react";
-import { Todo, SampleTodo } from "./types/todo";
+import { Todo, SampleTodo } from "../types/todo";
 import {
   addTodo,
   toggleTodoCompletion,
   deleteTodo,
+  calculateDepth,
   fetchRandomTodo,
   sortTodos,
-} from "./utils/todoUtils";
+} from "./todoUtils";
+
+const LOCAL_STORAGE_KEY = "todos";
 
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [suggestedTodo, setSuggestedTodo] = useState<SampleTodo | null>(null);
-
+  const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
   const [newSubtask, setNewSubtask] = useState("");
   const [sortAscending, setSortAscending] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
   const [showUncompleted, setShowUncompleted] = useState(true);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+    handleFetchRandomTodo();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   const handleFetchRandomTodo = async () => {
     try {
@@ -47,6 +62,7 @@ export default function TodoList() {
       setTodos((prevTodos) => addTodo(prevTodos, text.trim(), parentId));
       setNewTodo("");
       setNewSubtask("");
+      setEditingTodoId(null);
     }
   };
 
@@ -96,6 +112,15 @@ export default function TodoList() {
           {new Date(todo.timestamp).toLocaleString()}
         </span>
         <button
+          onClick={() =>
+            setEditingTodoId(editingTodoId === todo.id ? null : todo.id)
+          }
+          className="btn btn-ghost btn-sm"
+          aria-label="Add subtask"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
           onClick={() => handleDeleteTodo(todo.id)}
           className="btn btn-ghost btn-sm"
           aria-label="Delete todo"
@@ -103,6 +128,32 @@ export default function TodoList() {
           <Trash2 className="w-4 h-4" />
         </button>
       </div>
+      {editingTodoId === todo.id && (
+        <form
+          onSubmit={(e) => handleAddTodo(e, newSubtask, todo.id)}
+          className="flex items-center gap-2 mt-2"
+        >
+          <input
+            type="text"
+            placeholder="Add a subtask..."
+            className="input input-bordered flex-1"
+            value={newSubtask}
+            onChange={(e) => setNewSubtask(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary btn-sm"
+            data-testid="subtaskButton"
+          >
+            Add
+          </button>
+        </form>
+      )}
+      {todo.subtodos.length > 0 && (
+        <div className="pl-4 mt-2">
+          {todo.subtodos.map((subtodo) => renderTodo(subtodo, depth + 1))}
+        </div>
+      )}
     </div>
   );
 
@@ -114,7 +165,7 @@ export default function TodoList() {
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl bg-base-100 shadow-xl rounded-box p-6">
-        <h1 className="text-3xl font-bold text-center mb-8">Todo Listt</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">Todo List</h1>
 
         <form onSubmit={(e) => handleAddTodo(e)} className="flex gap-2 mb-6">
           <input
@@ -201,6 +252,12 @@ export default function TodoList() {
           <div className="text-sm text-base-content/60 text-center mt-4">
             {todos.filter((t) => t.completed).length} of {todos.length} tasks
             completed
+          </div>
+        )}
+
+        {todos.length > 0 && (
+          <div className="text-sm text-base-content/60 text-center mt-2">
+            Maximum depth of todos: {Math.max(...todos.map(calculateDepth))}
           </div>
         )}
       </div>

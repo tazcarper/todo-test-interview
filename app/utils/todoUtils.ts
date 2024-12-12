@@ -1,108 +1,62 @@
 import { Todo, SampleTodo } from "../types/todo";
 
+
+
+/* 
+Add a new todo to the end of the list
+
+A Todo structure:
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+  timestamp: number;
+}
+  
+Should return an array of Todo objects.
+
+  */
 export const addTodo = (
   todos: Todo[],
   text: string,
-  parentId?: string
 ): Todo[] => {
-  const newTodo: Todo = {
-    id: Date.now().toString(),
-    text,
-    completed: false,
-    subtodos: [],
-    timestamp: Date.now(),
-  };
+  return []
 
-  if (!parentId) {
-    return [...todos, newTodo];
-  }
-
-  return todos.map((todo) => {
-    if (todo.id === parentId) {
-      return { ...todo, subtodos: [...todo.subtodos, newTodo] };
-    }
-    if (todo.subtodos.length > 0) {
-      return { ...todo, subtodos: addTodo(todo.subtodos, text, parentId) };
-    }
-    return todo;
-  });
 };
+
+
+/* 
+
+Marks a todo as complete or incomplete
+
+Should return an array of Todo objects with updated completed todo.
+
+*/
+
 
 export const toggleTodoCompletion = (todos: Todo[], id: string): Todo[] => {
-  return todos.map((todo) => {
-    if (todo.id === id) {
-      const newCompleted = !todo.completed;
-      return {
-        ...todo,
-        completed: newCompleted,
-        subtodos: toggleAllSubtodos(todo.subtodos, newCompleted),
-      };
-    }
-    if (todo.subtodos.length > 0) {
-      return { ...todo, subtodos: toggleTodoCompletion(todo.subtodos, id) };
-    }
-    return todo;
-  });
+
+
 };
 
-const toggleAllSubtodos = (subtodos: Todo[], completed: boolean): Todo[] => {
-  return subtodos.map((subtodo) => ({
-    ...subtodo,
-    completed,
-    subtodos: toggleAllSubtodos(subtodo.subtodos, completed),
-  }));
-};
 
+/* 
+Should delete a specific todo in the list 
+
+Should return a list of todos
+*/
 export const deleteTodo = (todos: Todo[], id: string): Todo[] => {
-  return todos
-    .filter((todo) => todo.id !== id)
-    .map((todo) => {
-      if (todo.subtodos.length > 0) {
-        return { ...todo, subtodos: deleteTodo(todo.subtodos, id) };
-      }
-      return todo;
-    });
+  
 };
 
-export const calculateDepth = (todo: Todo): number => {
-  if (todo.subtodos.length === 0) {
-    return 1;
-  }
-  return 1 + Math.max(...todo.subtodos.map(calculateDepth));
-};
 
-export const fetchRandomTodo = async (
-  existingSuggestion: SampleTodo | null,
-  currentTodos: Todo[]
-): Promise<SampleTodo> => {
-  try {
-    const response = await fetch("/sample-todos.json");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    if (!data.todos || !Array.isArray(data.todos) || data.todos.length === 0) {
-      throw new Error("Invalid or empty todos data");
-    }
-    
-    const availableTodos = data.todos.filter((todo: SampleTodo) => 
-      todo.text !== existingSuggestion?.text && 
-      !currentTodos?.some(currentTodo => currentTodo.text === todo.text)
-    );
 
-    if (availableTodos.length === 0) {
-      throw new Error("No new todos available");
-    }
+/* 
+Should sort the todos based on when they were added. 
 
-    const randomIndex = Math.floor(Math.random() * availableTodos.length);
-    console.log(availableTodos[randomIndex])
-    return availableTodos[randomIndex];
-  } catch (error) {
-    console.error("Error fetching random todo:", error);
-    throw error;
-  }
-};
-
+Should return a list of todos in sorted order
+*/
 export const sortTodos = (todos: Todo[], ascending: boolean): Todo[] => {
   return [...todos]
     .sort((a, b) => {
@@ -114,17 +68,43 @@ export const sortTodos = (todos: Todo[], ascending: boolean): Todo[] => {
     }));
 };
 
+
+/* 
+Should filter the todos to only show completed, only show incompleted, or show all.
+
+Should return a list of filtered todos
+*/
+
 export const filterTodos = (todos: Todo[], showCompleted: boolean): Todo[] => {
-  return todos
-    .filter((todo) => {
-      if (showCompleted) {
-        return todo.completed;
-      } else {
-        return !todo.completed || todo.subtodos.length > 0;
-      }
-    })
-    .map((todo) => ({
-      ...todo,
-      subtodos: todo.subtodos,
-    }));
+  
+};
+
+
+/* 
+
+Endpoint: "/sample-todos.json"
+
+Use the fetch method to get sample TODOs from the JSON.
+
+Return the todo with this structure.
+
+- Should not return the same suggestion as current suggestion
+- Should not return a suggestion that is already a todo
+
+interface SampleTodo {
+  id: number;
+  text: string;
+  category: string;
+}
+
+*/
+
+
+export const fetchRandomTodo = async (
+  existingSuggestion: SampleTodo | null,
+  currentTodos: Todo[]
+): Promise<SampleTodo> => {
+
+// Return a suggested Todo from the JSON
+
 };
