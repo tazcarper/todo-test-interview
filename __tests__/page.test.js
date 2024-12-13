@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import TodoList from "../page";
+import TodoList from "../app/page";
 import * as todoUtils from "../utils/todoUtils";
 
 // Mock the localStorage
@@ -42,6 +42,8 @@ describe("TodoList Component", () => {
 
 
   
+  // Start here
+
   test("renders the correct title for Todo Application", async () => {
     await act(async () => {
       render(<TodoList />);
@@ -87,6 +89,8 @@ describe("TodoList Component", () => {
     });
 
     expect(todoCheckbox).toBeChecked();
+    expect(screen.queryByText("1 of 1 tasks completed")).toBeInTheDocument();
+
   });
 
   test("deletes a todo", async () => {

@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import TodoList from "../solution/page";
-import * as todoUtils from "../solution/todoUtils";
+import TodoList from "../app/solution/page";
+import * as todoUtils from "../utils/solution/todoUtils";
 
 // Mock the localStorage
 const localStorageMock = (function () {
@@ -23,8 +23,8 @@ const localStorageMock = (function () {
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 // Mock the fetchRandomTodo function
-jest.mock("../solution/todoUtils", () => ({
-  ...jest.requireActual("../solution/todoUtils"),
+jest.mock("../utils/solution/todoUtils", () => ({
+  ...jest.requireActual("../utils/solution/todoUtils"),
   fetchRandomTodo: jest
     .fn()
     .mockResolvedValue({ id: 1, text: "Mocked todo", category: "Test" }),
@@ -71,6 +71,7 @@ describe("TodoList Component", () => {
     });
     const input = screen.getByPlaceholderText("Add a new todo...");
     const addButton = screen.getByTestId("addTodo");
+  
 
     await act(async () => {
       fireEvent.change(input, { target: { value: "Toggle test todo" } });
@@ -84,6 +85,7 @@ describe("TodoList Component", () => {
     });
 
     expect(todoCheckbox).toBeChecked();
+    expect(screen.queryByText("1 of 1 tasks completed")).toBeInTheDocument();
   });
 
   test("deletes a todo", async () => {

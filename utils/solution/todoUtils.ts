@@ -1,4 +1,4 @@
-import { Todo, SampleTodo } from "../types/todo";
+import { Todo, SampleTodo } from "../../types/todo";
 
 export const addTodo = (
   todos: Todo[],

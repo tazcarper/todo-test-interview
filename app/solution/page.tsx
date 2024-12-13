@@ -9,7 +9,7 @@ import {
   ArrowUpDown,
   Filter,
 } from "lucide-react";
-import { Todo, SampleTodo } from "../types/todo";
+import { Todo, SampleTodo } from "../../types/todo";
 import {
   addTodo,
   toggleTodoCompletion,
@@ -17,7 +17,7 @@ import {
   calculateDepth,
   fetchRandomTodo,
   sortTodos,
-} from "./todoUtils";
+} from "../../utils/solution/todoUtils";
 
 const LOCAL_STORAGE_KEY = "todos";
 
@@ -249,15 +249,12 @@ export default function TodoList() {
         </div>
 
         {todos.length > 0 && (
-          <div className="text-sm text-base-content/60 text-center mt-4">
+          <div
+            className="text-sm text-base-content/60 text-center mt-4"
+            data-testid="numberCompleted"
+          >
             {todos.filter((t) => t.completed).length} of {todos.length} tasks
             completed
-          </div>
-        )}
-
-        {todos.length > 0 && (
-          <div className="text-sm text-base-content/60 text-center mt-2">
-            Maximum depth of todos: {Math.max(...todos.map(calculateDepth))}
           </div>
         )}
       </div>

@@ -58,14 +58,7 @@ Should sort the todos based on when they were added.
 Should return a list of todos in sorted order
 */
 export const sortTodos = (todos: Todo[], ascending: boolean): Todo[] => {
-  return [...todos]
-    .sort((a, b) => {
-      return ascending ? a.timestamp - b.timestamp : b.timestamp - a.timestamp;
-    })
-    .map((todo) => ({
-      ...todo,
-      subtodos: sortTodos(todo.subtodos, ascending),
-    }));
+
 };
 
 

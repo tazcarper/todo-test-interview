@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#### Welcome to the TODO app! This project is partially built, and it’s your task to complete the implementation. Follow these steps to get started:
 
-## Getting Started
+##### Setup:
 
-First, run the development server:
+Clone the repository and install dependencies:
 
-```bash
+```
+npm install
+Run the application using:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the app in your browser. If you see the TODO application interface, you’re ready to start!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Your Task:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application allows users to:
 
-## Learn More
+- Add TODO items
+- Delete TODO items
+- Filter TODO items
+- Sort TODO items
+- Use a suggested TODO feature
 
-To learn more about Next.js, take a look at the following resources:
+Your job is to implement the state management and ensure all these functionalities work as intended.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Additional Notes:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+CSS Frameworks: The app uses Tailwind CSS and DaisyUI for styling and components.
 
-## Deploy on Vercel
+Testing: Ensure all the Jest tests pass by matching the provided solution as closely as possible.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Testing:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ensure all Jest tests pass by matching the provided solution. Run the tests using:
+
+`npm test`
+
+Get started and show off your skills!
+
+### !! Hold !!
+
+##### Complete previous tasks and then move to here
+
+#### Advanced Feature: Subtasks
+
+Once the basic functionality is complete, take on this advanced challenge:
+
+#### Subtasks Functionality:
+
+- Add the ability for users to create subtasks under a TODO item.
+  - Subtasks can have unlimited nesting (i.e., subtasks of subtasks).
+- Display subtasks indented below their parent TODO item.
+- When a parent TODO or subtask is marked as completed, all its child
+  subtasks should also be marked as completed.
+
+#### Example:
+
+###### TODO: Clean the kitchen
+
+- Clean the oven
+  - Clean the racks
+- Clean the stove top
+  - Soak with soapy water
+    - Wipe off
+      - Throw paper towel away
+  - Sprinkle baking soda
+    - Wipe off
+- Clean the sink
+- Wipe the countertops
+- Clean the floors
+  - Vacuum
+  - Mop
