@@ -62,15 +62,7 @@ export const sortTodos = (todos: Todo[], ascending: boolean): Todo[] => {
 };
 
 
-/* 
-Should filter the todos to only show completed, only show incompleted, or show all.
 
-Should return a list of filtered todos
-*/
-
-export const filterTodos = (todos: Todo[], showCompleted: boolean): Todo[] => {
-  
-};
 
 
 /* 

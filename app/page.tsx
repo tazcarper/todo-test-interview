@@ -13,14 +13,68 @@ import {
 } from "../utils/todoUtils";
 
 export default function TodoList() {
+  // List of Todos
   const [todos, setTodos] = useState<Todo[]>([]);
+  // Add todo input field value
   const [newTodo, setNewTodo] = useState("");
+  // Sorting state
+  const [sortAscending, setSortAscending] = useState(true);
+  // Show completed state
+  const [showCompleted, setShowCompleted] = useState(true);
+  // Show uncompleted state
+  const [showUncompleted, setShowUncompleted] = useState(true);
+  // Current suggested todo object
   const [suggestedTodo, setSuggestedTodo] = useState<SampleTodo | null>(null);
 
-  const sortAscending = undefined;
-  const showCompleted = undefined;
-  const showUncompleted = undefined;
+  // Question 1
+  // Make "addTodo" work as intended.
+  const handleAddTodo = (e: React.FormEvent) => {
+    e.preventDefault();
 
+    const todoText = newTodo.trim();
+
+    const updatedTodoList = addTodo(todos, todoText);
+
+    setTodos((prev) => [...prev, updatedTodoList]);
+    resetInputs();
+  };
+
+  // Question 2
+  // Make "toggleTodoCompletion" work as intended.
+  // id: Id of todo object currently toggled
+  const handleToggleTodo = (id: string) => {
+    const updatedTodoList = toggleTodoCompletion(todos, id);
+    setTodos((prev) => [...prev, updatedTodoList]);
+  };
+
+  // Question 3
+  // Make deleteTodo work as intended.
+  // id: Id of todo object to be deleted
+  const handleDeleteTodo = (id: string) => {
+    const updatedTodoList = deleteTodo(todos, id);
+    setTodos((prev) => [...prev, updatedTodoList]);
+  };
+
+  // Question 4
+  // Sort the rendered todos in ascending or descending order
+  // Use the sortAscending useState hook
+  const handleSort = () => {
+    const updatedTodoList = sortTodos(todos, sortAscending);
+    setTodos((prevTodos) => sortTodos(prevTodos, updatedTodoList));
+  };
+
+  // Question 5
+  // Filtered the todo list based on todos that are marked as completed
+  // Use the showCompleted useState hook
+  const handleCompletedFilter = () => {};
+
+  // Question 6
+  // Filtered the todo list based on todos that are marked as uncompleted
+  // Use the showUncompleted useState hook
+  const handleUncompletedFilter = () => {};
+
+  // Question 7
+  // Create the fetch random todo function to return a new todo suggestion object
   const handleFetchRandomTodo = async () => {
     try {
       const newSuggestedTodo = await fetchRandomTodo(suggestedTodo, todos);
@@ -30,24 +84,11 @@ export default function TodoList() {
     }
   };
 
-  const handleAddTodo = (e: React.FormEvent, text: string = newTodo) => {
-    e.preventDefault();
-    // addTodo(todos, text);
+  const resetInputs = () => {
+    setNewTodo("");
+    // setNewSubtask("");
+    // setEditingTodoId(null);
   };
-
-  const handleToggleTodo = (id: string) => {
-    // toggleTodoCompletion()
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    // deleteTodo()
-  };
-
-  const handleSort = () => {};
-
-  const handleCompletedFilter = () => {};
-
-  const handleUncompletedFilter = () => {};
 
   const renderTodo = (todo: Todo, depth: number = 0) => (
     <React.Fragment key={todo.id}>
@@ -71,6 +112,8 @@ export default function TodoList() {
             type="text"
             placeholder="Add a new todo..."
             className="input input-bordered flex-1"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
           />
           <button
             type="submit"

@@ -1,5 +1,5 @@
-import { fetchRandomTodo } from '../utils/todoUtils';
-import { Todo, SampleTodo } from '../types/todo';
+import { fetchRandomTodo } from '../../utils/todoUtils';
+import { Todo, SampleTodo } from '../../types/todo';
 
 // Mock the global fetch function
 global.fetch = jest.fn();

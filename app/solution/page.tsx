@@ -58,6 +58,7 @@ export default function TodoList() {
     parentId?: string
   ) => {
     e.preventDefault();
+    console.log(e);
     if (text.trim()) {
       setTodos((prevTodos) => addTodo(prevTodos, text.trim(), parentId));
       setNewTodo("");
